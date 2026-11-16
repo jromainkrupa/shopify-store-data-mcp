@@ -2,7 +2,7 @@
 
 <!-- mcp-name: io.storeradar/shopify-store-database -->
 
-A hosted Model Context Protocol (MCP) server that searches a database of 2.7 million live Shopify stores. Your AI assistant can find, count and look up Shopify stores by installed apps, theme, tech stack, country and catalog size.
+A hosted Model Context Protocol (MCP) server that searches a database of 3.4 million live Shopify stores. Your AI assistant can find, count, describe and look up Shopify stores by installed apps, theme, tech stack, country and catalog size.
 
 It works with Claude, ChatGPT, Claude Code, Cursor and any other MCP client that speaks streamable HTTP. It is read only. It is free to connect, with anonymized results on the free plan.
 
@@ -32,7 +32,7 @@ StoreRadar is independent and is not affiliated with Shopify.
 | Build a shopping assistant for one store | [Shopify Storefront Catalog MCP](https://shopify.dev/docs/agents/catalog/storefront-catalog) | The public catalog of one store |
 | Search products across Shopify merchants | [Shopify Global Catalog MCP](https://shopify.dev/docs/agents/catalog/global-catalog) | Products from many merchants, for shopping agents |
 | Manage your own store | An Admin API MCP server | The orders, customers and inventory of your store, with its authorization |
-| Find and filter Shopify stores across the market | StoreRadar MCP (this server) | A database of 2.7 million live Shopify stores: apps, theme, tech stack, country, catalog size, contacts |
+| Find and filter Shopify stores across the market | StoreRadar MCP (this server) | A database of 3.4 million live Shopify stores: apps, theme, tech stack, country, catalog size, contacts |
 
 Use StoreRadar for prospecting, market sizing and competitor research. Use the other servers to read products, prices or orders.
 
@@ -103,6 +103,7 @@ The server publishes its OAuth metadata at `https://www.storeradar.io/.well-know
 
 - "How many Shopify stores run both Klaviyo and Judge.me?"
 - "Find Shopify stores with more than 1,000 products that run Recharge."
+- "Describe the Shopify stores in France: which apps, themes and technologies do they use?"
 - "Which theme and apps does shop.example.com use?"
 - "Which email marketing apps can you filter Shopify stores by?"
 - "Run the StoreRadar health tool."
@@ -115,6 +116,7 @@ All tools are read only. They cannot change your account or start a purchase.
 | --- | --- | --- | --- |
 | `search_stores` | Returns a page of up to 20 stores that match your filters | 20 per minute, 1,000 per day | 5 times the free limit |
 | `count_stores` | Counts the stores that match your filters, without rows | 30 per minute, 2,000 per day | 5 times the free limit |
+| `describe_segment` | Describes a segment from a 2% sample: its size, and the share of its top industries, countries, themes, apps and technologies. It returns no store rows | 10 per minute, 500 per day | 5 times the free limit |
 | `get_store` | Returns the record of one store by domain | 30 per minute, 500 per day | 5 times the free limit |
 | `list_filter_options` | Lists the valid values for the filters: industries, countries, languages, technologies, Shopify apps, TLDs | 60 per minute, 3,000 per day | 5 times the free limit |
 | `health` | Tests the connection and tells you if your results are anonymized | Not metered | Not metered |
@@ -137,15 +139,23 @@ Filters cover Shopify apps, technologies, tracking pixels, theme, country, langu
 
 ## Free and paid access
 
-| | Free account | StoreRadar Annual ($399 per year) |
-| --- | --- | --- |
-| All 5 tools | Yes | Yes |
-| Store domains, emails and phone numbers | Anonymized | Shown |
-| Segments of fewer than 25 stores | Count only, no rows | All rows |
-| Free-text domain search | No | Yes |
-| Verified-email filter | No | Yes |
-| Rate limits | Free limits | 5 times the free limits |
-| Full database export as a file | No | Yes, any day of the year |
+| | Free account | CSV pass (60 days) | StoreRadar Annual |
+| --- | --- | --- | --- |
+| All 6 tools | Yes | Yes | Yes |
+| Store domains, emails and phone numbers | Anonymized, with two exceptions | Shown | Shown |
+| Segments of fewer than 25 stores | Count only, no rows | All rows | All rows |
+| Free-text domain search | No | Yes | Yes |
+| Verified-email filter | No | Yes | Yes |
+| Search traffic and review data | No | No | Yes |
+| Rate limits | Free limits | Free limits | 5 times the free limits |
+| Full database as a CSV file | No | Yes | Yes, a new file any day of the year |
+
+A CSV pass is the one-time purchase of the full CSV. It gives 60 days of access.
+
+A free account sees a real domain in two cases:
+
+- `get_store` shows the domain that you typed, for a maximum of 50 domains each day.
+- The first page of a search can show a maximum of 5 matching stores with their real domain. StoreRadar already names these stores on its public pages.
 
 An anonymized response contains an upgrade link. Your assistant can tell you which question needed the paid plan.
 
@@ -156,7 +166,8 @@ Plans and prices: [storeradar.io/pricing](https://www.storeradar.io/pricing).
 These rules prevent wrong conclusions:
 
 - A count of "fewer than 25" with an empty `stores` array means that the segment is too small to show. It does not mean "no matches".
-- A count of "10000+" means more than 10,000 stores. This cap applies to all plans.
+- A count of more than 10,000 is an estimate from a 2% sample, for example "about 60,000". It gives the size of the segment. It is not a number of rows that you can page through. This rule applies to all plans.
+- A count of "10000+" means more than 10,000 stores, with no estimate available.
 - A count of "unknown" means that the count timed out. It is not zero.
 - `search_stores` stops at offset 500. If `next_cursor` is absent, you can be at this limit and not at the end of the results.
 - Search traffic is an estimate of Google organic traffic. It is not visits or sales.
@@ -178,7 +189,7 @@ StoreRadar crawls public Shopify storefronts and records what each storefront sh
 
 ### Is it free?
 
-Yes, it is free to connect. A free account gets all 5 tools with anonymized domains and contacts. StoreRadar Annual shows real domains and contacts.
+Yes, it is free to connect. A free account gets all 6 tools with anonymized domains and contacts. A CSV pass shows real domains and contacts for 60 days. StoreRadar Annual shows them all year.
 
 ### What data do you keep about my calls?
 
