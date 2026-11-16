@@ -59,13 +59,13 @@ The free Claude plan allows one custom connector.
 
 ### ChatGPT
 
-Custom connectors need a paid ChatGPT plan and Developer mode.
+StoreRadar is a plugin in the ChatGPT plugin directory. You do not paste a server URL.
 
-1. Open Settings, then Apps and connectors, then Advanced.
-2. Turn on Developer mode.
-3. In Apps and connectors, select Create.
-4. Paste `https://www.storeradar.io/mcp` as the MCP server URL.
-5. When ChatGPT asks, sign in to StoreRadar.
+1. Open the [StoreRadar listing](https://chatgpt.com/plugins/plugin_asdk_app_6ae8473190a081918a94005a9d896cdb) in ChatGPT.
+2. Add the plugin.
+3. When the consent screen opens, sign in to StoreRadar.
+
+OpenAI decides which plans, workspaces and regions can add a plugin. The page [StoreRadar for ChatGPT](https://www.storeradar.io/chatgpt) shows what you can ask.
 
 ### Claude Code
 
